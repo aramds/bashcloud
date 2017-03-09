@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 V_HOST=wphost
-V_HOST_TLD=tld
+V_TLD=tld
 
 apt-get -y update && apt-get -y upgrade
 
@@ -28,7 +28,7 @@ rm -rf /tmp/latest.tar.gz
 chmod -R u=rw,g=r,o=r,a+X /usr/share/nginx/html
 chown -R www-data:www-data /usr/share/nginx/html
 
-cat <<EOF > /etc/php5/fpm/pool.d/$V_HOST.conf
+sed "s|\$V_HOST|${V_HOST}|g;s|$\V_TLD|${V_TLD}|g" <<'EOF' > /etc/php5/fpm/pool.d/$V_HOST.conf
 [www]
 listen = /var/run/php5-$V_HOST.sock
 listen.allowed_clients = 127.0.0.1
@@ -52,10 +52,10 @@ env[TMPDIR] = /tmp
 env[TEMP] = /tmp
 EOF
 
-cat <<EOF > /etc/nginx/conf.d/$V_HOST80.conf
+sed "s|\$V_HOST|${V_HOST}|g;s|$\V_TLD|${V_TLD}|g" <<'EOF' > /etc/nginx/conf.d/$V_HOST"80".conf
 server {
     listen      80;
-    server_name $V_HOST.$V_HOST_TLD www.$V_HOST.$V_HOST_TLD;
+    server_name $V_HOST.$V_TLD www.$V_HOST.$V_TLD;
     root        /usr/share/nginx/html;
     index       index.php;
     access_log  /var/log/nginx/domains/$V_HOST.log combined;
@@ -107,7 +107,3 @@ systemctl restart nginx
 systemctl restart php5-fpm
 
 echo "setup completed."
-
-
-
-
