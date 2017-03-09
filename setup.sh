@@ -10,7 +10,7 @@ echo "deb-src http://nginx.org/packages/debian/ jessie nginx" >> /etc/apt/source
 wget http://nginx.org/keys/nginx_signing.key && apt-key add nginx_signing.key
 
 apt-get -y update
-apt-get install -y nginx php5-fpm php5-cgi php5 php5-mysql php5-gd php5-common php5-mysqlnd php5-xmlrpc php5-curl php5-cli php-pear php5-dev php5-imap php5-mcrypt
+apt-get install -y nginx php5-fpm php5 php5-gd php5-common php5-mysqlnd php5-xmlrpc php5-curl php5-cli php-pear php5-dev php5-imap php5-mcrypt
 
 sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" "/etc/php5/fpm/php.ini"
 sed -i "s/user  nginx;/user  www-data;/" "/etc/nginx/nginx.conf"
@@ -103,7 +103,10 @@ server {
 }
 EOF
 
+systemctl restart nginx
+systemctl restart php5-fpm
 
+echo "setup completed."
 
 
 
