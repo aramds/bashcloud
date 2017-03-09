@@ -24,6 +24,7 @@ wget https://wordpress.org/latest.tar.gz
 tar -zxvf latest.tar.gz
 mv /tmp/wordpress/* /usr/share/nginx/html
 rm -rf /tmp/latest.tar.gz
+rm -rf /tmp/wordpress
 
 chmod -R u=rw,g=r,o=r,a+X /usr/share/nginx/html
 chown -R www-data:www-data /usr/share/nginx/html
